@@ -2,7 +2,7 @@
    PARKING DATA FROM BACKEND
 ===================================================== */
 
-const API_BASE_URL = "http://localhost:8080/api";
+const API_BASE_URL = "https://smart-parking-system-mjq5.onrender.com/api";
 
 let parkingData = {
     1: [],
