@@ -1,11 +1,12 @@
+
 spring:
   application:
     name: smartparking
 
   datasource:
-    url: jdbc:mysql://localhost:3306/smartparking
-    username: root
-    password: ${DB_PASSWORD}
+    url: ${SPRING_DATASOURCE_URL}
+    username: ${SPRING_DATASOURCE_USERNAME}
+    password: ${SPRING_DATASOURCE_PASSWORD}
 
   jpa:
     hibernate:
@@ -16,11 +17,11 @@ spring:
         format_sql: true
 
 server:
-  port: 8080
+  port: ${PORT:8080}
 
 jwt:
   secret: ${JWT_SECRET}
-  expiration: 86400000
+  expiration: ${JWT_EXPIRATION}
 
 admin:
   setup-secret: ${ADMIN_SETUP_SECRET}
