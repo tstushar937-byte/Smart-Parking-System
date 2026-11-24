@@ -99,7 +99,8 @@ public class SecurityConfig {
 
         configuration.setAllowedOrigins(List.of(
             "http://127.0.0.1:5500",
-            "http://localhost:5500"
+            "http://localhost:5500",
+            "https://smart-parking-system-1-biot.onrender.com"
         ));
 
         configuration.setAllowedMethods(List.of(
