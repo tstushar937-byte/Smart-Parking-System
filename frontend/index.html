@@ -1,0 +1,1068 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>ParkNova - Smart Parking System</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<!-- ================= NAVBAR ================= -->
+
+<header class="navbar">
+
+    <div class="logo">
+        🚗 ParkNova
+    </div>
+
+    <nav>
+        <a href="#dashboard">Dashboard</a>
+        <a href="#parking">Parking</a>
+        <a href="#booking">Booking</a>
+        <a href="#about">About</a>
+        <a href="#myBookings" id="myBookingsLink">
+            My Bookings
+        </a>
+    </nav>
+
+    <div class="auth-buttons" id="authButtons">
+
+      <button class="customer-login-btn"
+            onclick="openAuth('customer')">
+           Customer Login
+      </button>
+
+      <button class="admin-login-btn"
+            onclick="openAuth('admin')">
+          Admin Login
+      </button>
+
+    </div>
+
+    <div class="auth-buttons"
+       id="customerArea"
+       style="display:none;">
+
+       <span id="welcomeCustomer"></span>
+
+       <button class="customer-login-btn"
+            onclick="customerLogout()">
+          Logout
+       </button>
+
+    </div>
+</header>
+
+
+<!-- ================= MAIN DASHBOARD ================= -->
+
+<section id="dashboard" class="hero">
+
+    <div class="hero-content">
+
+        <p class="hero-small">
+            SMART PARKING MANAGEMENT SYSTEM
+        </p>
+
+        <h1>
+            Find Your Parking
+            <span>Spot Instantly.</span>
+        </h1>
+
+        <p class="hero-description">
+            Find available parking slots, choose your vehicle type,
+            book your slot and make payment easily.
+        </p>
+
+        <div class="hero-buttons">
+
+            <button class="primary-btn"
+                    onclick="scrollToParking()">
+                Find Parking
+            </button>
+
+            <button class="secondary-btn"
+                    onclick="openBooking()">
+                Book a Slot
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- Availability Card -->
+
+    <div class="hero-card">
+
+        <div class="hero-card-icon">
+            🅿️
+        </div>
+
+        <h3>
+            Parking Availability
+        </h3>
+
+        <p>
+            Real-time parking status
+        </p>
+
+        <div class="availability-number"
+             id="heroAvailable">
+            48
+        </div>
+
+        <span>
+            Slots Available
+        </span>
+
+    </div>
+
+</section>
+
+
+<!-- ================= STATISTICS ================= -->
+
+<section class="statistics">
+
+    <div class="stat-card">
+
+        <div class="stat-icon">
+            🅿️
+        </div>
+
+        <h2 id="totalSlots">
+            80
+        </h2>
+
+        <p>
+            Total Slots
+        </p>
+
+    </div>
+
+
+    <div class="stat-card available-stat">
+
+        <div class="stat-icon">
+            ✅
+        </div>
+
+        <h2 id="availableSlots">
+            48
+        </h2>
+
+        <p>
+            Available
+        </p>
+
+    </div>
+
+
+    <div class="stat-card occupied-stat">
+
+        <div class="stat-icon">
+            🚗
+        </div>
+
+        <h2 id="occupiedSlots">
+            20
+        </h2>
+
+        <p>
+            Occupied
+        </p>
+
+    </div>
+
+
+    <div class="stat-card construction-stat">
+
+        <div class="stat-icon">
+            🚧
+        </div>
+
+        <h2 id="constructionSlots">
+            12
+        </h2>
+
+        <p>
+            Under Construction
+        </p>
+
+    </div>
+
+</section>
+
+
+<!-- ================= PARKING SECTION ================= -->
+
+<section id="parking" class="parking-section">
+
+    <div class="section-heading">
+
+        <p class="section-small">
+            PARKING MANAGEMENT
+        </p>
+
+        <h2>
+            Select Your Parking Slot
+        </h2>
+
+        <p>
+            Choose a floor and vehicle type to find your parking space.
+        </p>
+
+    </div>
+
+
+    <!-- Floor Selection -->
+
+    <div class="floor-buttons">
+
+        <button class="floor-btn active"
+                onclick="changeFloor(1, this)">
+            Floor 1
+        </button>
+
+        <button class="floor-btn"
+                onclick="changeFloor(2, this)">
+            Floor 2
+        </button>
+
+        <button class="floor-btn"
+                onclick="changeFloor(3, this)">
+            Floor 3
+        </button>
+
+        <button class="floor-btn"
+                onclick="changeFloor(4, this)">
+            Floor 4
+        </button>
+
+    </div>
+
+
+    <!-- Vehicle Selection -->
+
+    <div class="vehicle-filter">
+
+        <button class="vehicle-btn active"
+                onclick="changeVehicleView('all', this)">
+            All
+        </button>
+
+        <button class="vehicle-btn"
+                onclick="changeVehicleView('car', this)">
+            🚗 Cars
+        </button>
+
+        <button class="vehicle-btn"
+                onclick="changeVehicleView('bike', this)">
+            🏍️ Bikes
+        </button>
+
+    </div>
+
+
+    <!-- Parking Layout -->
+
+    <div class="parking-container">
+
+        <div class="parking-info">
+
+            <div>
+                <span class="legend available"></span>
+                Available
+            </div>
+
+            <div>
+                <span class="legend occupied"></span>
+                Occupied
+            </div>
+
+            <div>
+                <span class="legend construction"></span>
+                Under Construction
+            </div>
+
+        </div>
+
+
+        <h3 id="currentFloorTitle">
+            Floor 1 Parking
+        </h3>
+
+
+        <div class="parking-grid"
+             id="parkingGrid">
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- ================= BOOKING SECTION ================= -->
+
+<section id="booking" class="booking-section">
+
+    <div class="section-heading">
+
+        <p class="section-small">
+            RESERVE YOUR SPACE
+        </p>
+
+        <h2>
+            Book Your Parking Slot
+        </h2>
+
+        <p>
+            Enter your details and reserve your parking space.
+        </p>
+
+    </div>
+
+    <div class="booking-container">
+
+        <form id="bookingForm">
+
+            <div class="form-row">
+
+                <div class="form-group">
+
+                    <label>Full Name</label>
+
+                    <input type="text"
+                           id="customerName"
+                           placeholder="Enter your name"
+                           required>
+
+                </div>
+
+                <div class="form-group">
+
+                    <label>Vehicle Number</label>
+
+                    <input type="text"
+                           id="vehicleNumber"
+                           placeholder="e.g. UK05AB1234"
+                           required>
+
+                </div>
+
+            </div>
+
+            <div class="form-row">
+
+                <div class="form-group">
+
+                    <label>Vehicle Type</label>
+
+                    <select id="vehicleType"
+                            onchange="calculatePrice()"
+                            required>
+
+                        <option value="">Select Vehicle</option>
+                        <option value="car">🚗 Car - ₹30/hour</option>
+                        <option value="bike">🏍️ Bike - ₹10/hour</option>
+
+                    </select>
+
+                </div>
+
+                <div class="form-group">
+
+                    <label>Parking Floor</label>
+
+                    <select id="bookingFloor" required>
+
+                        <option value="">Select Floor</option>
+                        <option value="1">Floor 1</option>
+                        <option value="2">Floor 2</option>
+                        <option value="3">Floor 3</option>
+                        <option value="4">Floor 4</option>
+
+                    </select>
+
+                </div>
+
+            </div>
+
+            <div class="form-row">
+
+                <div class="form-group">
+
+                    <label>Parking Slot</label>
+
+                    <input type="text"
+                           id="selectedSlot"
+                           placeholder="Select slot from parking section"
+                           readonly
+                           required>
+
+                </div>
+
+                <div class="form-group">
+
+                    <label>Duration</label>
+
+                    <select id="duration"
+                            onchange="calculatePrice()"
+                            required>
+
+                        <option value="">Select Duration</option>
+                        <option value="1">1 Hour</option>
+                        <option value="2">2 Hours</option>
+                        <option value="3">3 Hours</option>
+                        <option value="4">4 Hours</option>
+                        <option value="5">5 Hours</option>
+
+                    </select>
+
+                </div>
+
+            </div>
+
+            
+            <!-- VEHICLE ARRIVAL DATE AND TIME -->
+
+            <div class="form-row">
+
+                <div class="form-group">
+
+                    <label>Parking Date</label>
+
+                    <input type="date"
+                        id="arrivalDate"
+                        required>
+
+                </div>
+
+                <div class="form-group">
+
+                <label>Parking Time</label>
+
+                <input type="time"
+                    id="arrivalTime"
+                    required>
+
+            </div>
+
+        </div>
+
+
+            <!-- PAYMENT -->
+
+            <div class="payment-box">
+
+                <h3>💳 Payment</h3>
+
+                <div class="payment-method">
+
+                    <label>
+                        <input type="radio"
+                               name="payment"
+                               value="UPI"
+                               required>
+                        UPI
+                    </label>
+
+                    <label>
+                        <input type="radio"
+                               name="payment"
+                               value="Card">
+                        Card
+                    </label>
+
+                    <label>
+                        <input type="radio"
+                               name="payment"
+                               value="Cash">
+                        Cash
+                    </label>
+
+                </div>
+
+                <div class="price-display">
+
+                    <span>Total Amount</span>
+
+                    <strong id="totalPrice">
+                        ₹0
+                    </strong>
+
+                </div>
+
+            </div>
+
+            <button type="submit" class="book-btn">
+                Confirm Booking
+            </button>
+
+        </form>
+
+    </div>
+
+</section>
+
+
+<!-- ================= ABOUT ================= -->
+
+<section id="about" class="about">
+
+    <div class="section-heading">
+
+        <p class="section-small">
+            ABOUT SMARTPARK
+        </p>
+
+        <h2>
+            Parking Made Simple
+        </h2>
+
+    </div>
+
+
+    <div class="about-content">
+
+        <div class="about-card">
+
+            <div class="about-icon">
+                🅿️
+            </div>
+
+            <h3>
+                Easy Parking
+            </h3>
+
+            <p>
+                Find available parking spaces quickly without
+                wasting time searching for a slot.
+            </p>
+
+        </div>
+
+
+        <div class="about-card">
+
+            <div class="about-icon">
+                📱
+            </div>
+
+            <h3>
+                Online Booking
+            </h3>
+
+            <p>
+                Select your vehicle, floor and parking slot
+                and reserve your space easily.
+            </p>
+
+        </div>
+
+
+        <div class="about-card">
+
+            <div class="about-icon">
+                🔐
+            </div>
+
+            <h3>
+                Secure Management
+            </h3>
+
+            <p>
+                Admins can monitor and update parking slot
+                availability.
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ================= AUTH MODAL ================= -->
+
+<div id="authModal"
+     class="modal">
+
+    <div class="modal-content">
+
+        <button class="close-btn"
+                onclick="closeAuth()">
+            ×
+        </button>
+
+
+        <!-- ROLE SELECTION -->
+
+        <div id="roleSelection">
+
+            <h2>
+                Welcome to SmartPark
+            </h2>
+
+            <p>
+                Select your account type
+            </p>
+
+            <div class="role-buttons">
+
+                <button class="role-btn customer-role"
+                        onclick="selectRole('customer')">
+
+                    👤 Customer
+
+                </button>
+
+
+                <button class="role-btn admin-role"
+                        onclick="selectRole('admin')">
+
+                    🛡️ Admin
+
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <!-- CUSTOMER LOGIN -->
+
+        <div id="customerLogin"
+             class="auth-form"
+             style="display:none;">
+
+            <h2 class="form-title">
+                Customer Login
+            </h2>
+
+            <input type="email"
+                   id="customerLoginEmail"
+                   placeholder="Email Address">
+
+            <input type="password"
+                   id="customerLoginPassword"
+                   placeholder="Password">
+
+            <button class="auth-submit"
+                    onclick="customerLogin()">
+
+                Login
+
+            </button>
+
+            <p class="auth-switch">
+
+                Don't have an account?
+
+                <span onclick="showCustomerSignup()">
+                    Sign Up
+                </span>
+
+            </p>
+
+            <button class="back-btn"
+                    onclick="showRoleSelection()">
+
+                ← Back
+
+            </button>
+
+        </div>
+
+
+        <!-- CUSTOMER SIGNUP -->
+
+        <div id="customerSignup"
+             class="auth-form"
+             style="display:none;">
+
+            <h2 class="form-title">
+                Customer Sign Up
+            </h2>
+
+            <input type="text"
+                   id="customerSignupName"
+                   placeholder="Full Name">
+
+            <input type="email"
+                   id="customerSignupEmail"
+                   placeholder="Email Address">
+
+            <input type="tel"
+                   id="customerSignupPhone"
+                   placeholder="Phone Number">
+
+            <input type="password"
+                   id="customerSignupPassword"
+                   placeholder="Password">
+
+            <input type="password"
+                   id="customerSignupConfirm"
+                   placeholder="Confirm Password">
+
+            <button class="auth-submit"
+                    onclick="customerSignup()">
+
+                Create Account
+
+            </button>
+
+            <p class="auth-switch">
+
+                Already have an account?
+
+                <span onclick="showCustomerLogin()">
+                    Login
+                </span>
+
+            </p>
+
+            <button class="back-btn"
+                    onclick="showRoleSelection()">
+
+                ← Back
+
+            </button>
+
+        </div>
+
+
+        <!-- ADMIN LOGIN -->
+
+        <div id="adminLogin"
+             class="auth-form"
+             style="display:none;">
+
+            <h2 class="form-title">
+                Admin Login
+            </h2>
+
+            <input type="email"
+                   id="adminLoginEmail"
+                   placeholder="Admin Email">
+
+            <input type="password"
+                   id="adminLoginPassword"
+                   placeholder="Password">
+
+            <button class="auth-submit admin-submit-btn"
+                    onclick="adminLogin()">
+
+                Admin Login
+
+            </button>
+
+            <p class="auth-switch">
+
+                New Admin?
+
+                <span onclick="showAdminSignup()">
+                    Register
+                </span>
+
+            </p>
+
+            <button class="back-btn"
+                    onclick="showRoleSelection()">
+
+                ← Back
+
+            </button>
+
+        </div>
+
+
+        <!-- ADMIN SIGNUP -->
+
+        <div id="adminSignup"
+             class="auth-form"
+             style="display:none;">
+
+            <h2 class="form-title">
+                Admin Registration
+            </h2>
+
+            <input type="text"
+                   id="adminSignupName"
+                   placeholder="Admin Name">
+
+            <input type="email"
+                   id="adminSignupEmail"
+                   placeholder="Admin Email">
+
+            <input type="password"
+                   id="adminSignupPassword"
+                   placeholder="Password">
+
+            <input type="text"
+                   id="adminCode"
+                   placeholder="Private Admin Setup Secret">
+
+            <p class="auth-note">
+                Enter your private setup secret to register the first admin.
+            </p>
+
+            <button class="auth-submit admin-submit-btn"
+                    onclick="adminSignup()">
+
+                Register Admin
+
+            </button>
+
+            <p class="auth-switch">
+
+                Already registered?
+
+                <span onclick="showAdminLogin()">
+                    Login
+                </span>
+
+            </p>
+
+            <button class="back-btn"
+                    onclick="showRoleSelection()">
+
+                ← Back
+
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- ================= ADMIN DASHBOARD ================= -->
+
+<section id="adminDashboard"
+         class="admin-dashboard"
+         style="display:none;">
+
+    <div class="admin-dashboard-content">
+
+        <div class="admin-header">
+
+            <div>
+
+                <p class="admin-small">
+                    SMARTPARK ADMINISTRATION
+                </p>
+
+                <h1>
+                    Parking Management Dashboard
+                </h1>
+
+                <p>
+                    Monitor and update parking slots.
+                </p>
+
+            </div>
+
+            <button class="logout-btn"
+                    onclick="adminLogout()">
+
+                Logout
+
+            </button>
+
+        </div>
+
+
+        <!-- ADMIN STATISTICS -->
+
+        <div class="admin-stats">
+
+            <div class="admin-stat">
+
+                <span>🅿️</span>
+
+                <h2 id="adminTotal">
+                    80
+                </h2>
+
+                <p>
+                    Total Slots
+                </p>
+
+            </div>
+
+
+            <div class="admin-stat">
+
+                <span>✅</span>
+
+                <h2 id="adminAvailable">
+                    48
+                </h2>
+
+                <p>
+                    Available
+                </p>
+
+            </div>
+
+
+            <div class="admin-stat">
+
+                <span>🚗</span>
+
+                <h2 id="adminOccupied">
+                    20
+                </h2>
+
+                <p>
+                    Occupied
+                </p>
+
+            </div>
+
+
+            <div class="admin-stat">
+
+                <span>🚧</span>
+
+                <h2 id="adminConstruction">
+                    12
+                </h2>
+
+                <p>
+                    Construction
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <!-- ADMIN CONTROLS -->
+
+        <div class="admin-control-card">
+
+            <div class="admin-control-header">
+
+                <div>
+
+                    <h2>
+                        Manage Parking Slots
+                    </h2>
+
+                    <p>
+                        Select a floor and update parking status.
+                    </p>
+
+                </div>
+
+
+                <select id="adminFloorSelect"
+                        onchange="loadAdminSlots()">
+
+                    <option value="1">
+                        Floor 1
+                    </option>
+
+                    <option value="2">
+                        Floor 2
+                    </option>
+
+                    <option value="3">
+                        Floor 3
+                    </option>
+
+                    <option value="4">
+                        Floor 4
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <div id="adminSlotGrid"
+                 class="admin-slot-grid">
+            </div>
+
+        </div>
+
+
+        <div class="admin-info">
+
+            <h3>
+                ℹ️ Admin Information
+            </h3>
+
+            <p>
+                Available - Slot can be booked.
+            </p>
+
+            <p>
+                Occupied - Slot is currently being used.
+            </p>
+
+            <p>
+                Under Construction - Slot cannot be booked.
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ================= FOOTER ================= -->
+
+<footer class="footer">
+
+    <div class="logo">
+        🚗 SmartPark
+    </div>
+
+    <p>
+        Smart Parking Management System
+    </p>
+
+    <p>
+        © 2026 SmartPark. All Rights Reserved.
+    </p>
+
+</footer>
+
+
+<script src="app.js"></script>
+
+<!-- ================= MY BOOKINGS SECTION ================= -->
+
+<section id="myBookings" class="my-bookings-section">
+
+    <div class="container">
+
+        <h2>My Bookings</h2>
+
+        <p>View your parking booking history.</p>
+
+        <div id="myBookingsContainer">
+
+            <p>Loading your bookings...</p>
+
+        </div>
+
+    </div>
+
+</section>
+
+</body>
+
+</html>
