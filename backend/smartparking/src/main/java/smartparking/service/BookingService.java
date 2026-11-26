@@ -73,6 +73,10 @@ public class BookingService {
         }
 
         LocalDateTime now = LocalDateTime.now();
+        
+        System.out.println("SERVER TIME: " + now);
+        System.out.println("BOOKING START TIME: " + startTime);
+        System.out.println("BOOKING STARTS NOW: " + !startTime.isAfter(now));
 
         if (startTime.isBefore(now)) {
             throw new IllegalArgumentException(
