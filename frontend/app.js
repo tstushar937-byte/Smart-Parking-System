@@ -1245,6 +1245,7 @@ document.addEventListener(
 // ==========================================
 
 
+
 async function fetchMyBookings() {
 
     const container = document.getElementById("myBookingsContainer");
@@ -1257,6 +1258,25 @@ async function fetchMyBookings() {
     }
 
     container.innerHTML = "<p>Loading your bookings...</p>";
+
+    // Format date and time
+    function formatDateTime(dateTime) {
+
+        if (!dateTime) return "—";
+
+        const date = new Date(dateTime);
+
+        if (isNaN(date.getTime())) return dateTime;
+
+        return date.toLocaleString("en-IN", {
+            day: "2-digit",
+            month: "short",
+            year: "numeric",
+            hour: "2-digit",
+            minute: "2-digit",
+            hour12: true
+        });
+    }
 
     try {
 
@@ -1290,6 +1310,8 @@ async function fetchMyBookings() {
                         <th>Vehicle Number</th>
                         <th>Parking Slot</th>
                         <th>Floor</th>
+                        <th>Arrival Date & Time</th>
+                        <th>Departure Date & Time</th>
                         <th>Duration</th>
                         <th>Total Amount</th>
                         <th>Status</th>
@@ -1317,6 +1339,8 @@ async function fetchMyBookings() {
                     <td>${booking.vehicleNumber}</td>
                     <td>${booking.parkingSlot.slotNumber}</td>
                     <td>${booking.parkingSlot.floor}</td>
+                    <td>${formatDateTime(booking.startTime)}</td>
+                    <td>${formatDateTime(booking.endTime)}</td>
                     <td>${booking.durationHours} hour(s)</td>
                     <td>₹${booking.totalAmount}</td>
                     <td>${booking.status}</td>
