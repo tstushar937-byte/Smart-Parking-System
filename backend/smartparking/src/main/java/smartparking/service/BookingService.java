@@ -123,7 +123,7 @@ public class BookingService {
         }
 
         boolean bookingStartsNow =
-        !startTime.isAfter(now);
+        !startTime.isAfter(now.plusMinutes(1));
 
         if (bookingStartsNow &&
                     !"AVAILABLE".equalsIgnoreCase(slot.getStatus())) {
