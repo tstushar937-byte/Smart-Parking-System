@@ -108,28 +108,33 @@ public class BookingService {
                     "This parking slot is under construction");
         }
 
-        LocalDateTime endTime = startTime.plusHours(durationHours);
+        boolean bookingStartsNow =
+        !startTime.isAfter(now.plusMinutes(1));
+
+        // Use actual server time for immediate bookings
+        LocalDateTime bookingStartTime =
+                bookingStartsNow ? now : startTime;
+
+        LocalDateTime endTime =
+                bookingStartTime.plusHours(durationHours);
 
         boolean alreadyBooked =
                 bookingRepository.existsOverlappingBooking(
                         slotId,
-                        startTime,
+                        bookingStartTime,
                         endTime
                 );
 
         if (alreadyBooked) {
-            throw new RuntimeException(
-                    "This parking slot is already booked for the selected time");
+             throw new RuntimeException(
+                "This parking slot is already booked for the selected time");
         }
 
-        boolean bookingStartsNow =
-        !startTime.isAfter(now.plusMinutes(1));
-
         if (bookingStartsNow &&
-                    !"AVAILABLE".equalsIgnoreCase(slot.getStatus())) {
+             !"AVAILABLE".equalsIgnoreCase(slot.getStatus())) {
 
-                throw new RuntimeException(
-                     "Parking slot is not currently available");
+             throw new RuntimeException(
+                "Parking slot is not currently available");
         }
 
         double totalAmount =
@@ -141,19 +146,20 @@ public class BookingService {
         booking.setParkingSlot(slot);
         booking.setVehicleNumber(formattedVehicleNumber);
         booking.setBookingTime(now);
-        booking.setStartTime(startTime);
+        booking.setStartTime(bookingStartTime);
         booking.setEndTime(endTime);
         booking.setDurationHours(durationHours);
         booking.setTotalAmount(totalAmount);
         booking.setStatus("CONFIRMED");
 
         if (bookingStartsNow) {
-             slot.setStatus("OCCUPIED");
-             parkingSlotRepository.save(slot);
+                slot.setStatus("OCCUPIED");
+                parkingSlotRepository.save(slot);
         }
-        
-        return bookingRepository.save(booking);
-    }
+
+       return bookingRepository.save(booking);
+}
+
 
     // Cancel booking for the authenticated customer
     @Transactional
